@@ -2,19 +2,20 @@ import React from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { height, width } from "../../modules";
 
-const Day = ({
-  index,
-  selected,
-  disabled,
-  select,
-  selectedStyle,
-  selectedTextStyle,
-  disabledStyle,
-  dayStyle,
-  dayTextStyle,
-  disabledTextStyle,
-  empty,
-}) => {
+const Day = (props) => {
+  const {
+    index,
+    selected,
+    disabled,
+    select,
+    selectedStyle,
+    selectedTextStyle,
+    disabledStyle,
+    dayStyle,
+    dayTextStyle,
+    disabledTextStyle,
+    empty,
+  } = props;
   const selectThis = () => {
     if (!disabled) {
       select(index);
@@ -52,15 +53,13 @@ const Day = ({
             ...dayStyles,
             ...(selected && selectedStyles),
             ...(disabled && disabledStyles),
-          }}
-        >
+          }}>
           <Text
             style={{
               ...dayTextStyles,
               ...(selected && selectedTextStyles),
               ...(disabled && disabledTextStyles),
-            }}
-          >
+            }}>
             {index}
           </Text>
         </View>

@@ -1,5 +1,7 @@
 # react-native-daterange-picker
 
+> This Project is naxulanth/react-native-daterange-picker fork
+
 A React Native component for picking date ranges or single dates.
 
 - Completely customizable
@@ -9,11 +11,11 @@ A React Native component for picking date ranges or single dates.
 
 ## Installation
 
-`yarn add react-native-daterange-picker`
+`yarn add @cocho/react-native-daterange-picker`
 
 or
 
-`npm install --save react-native-daterange-picker`
+`npm install --save @cocho/react-native-daterange-picker`
 
 ## Usage
 

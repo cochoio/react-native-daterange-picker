@@ -1,6 +1,12 @@
-import momentDefault from "moment";
+import momentDefault, { Moment } from "moment";
 import PropTypes from "prop-types";
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  PropsWithChildren,
+  useMemo,
+} from "react";
 import {
   StyleSheet,
   Text,
@@ -13,11 +19,54 @@ import Button from "./components/Button";
 import Day from "./components/Day";
 import Header from "./components/Header";
 import { height, width } from "./modules";
-import chevronL from "./assets/chevronL.png";
-import chevronR from "./assets/chevronR.png";
+import assets from "./assets";
 
-const DateRangePicker = ({
-  moment,
+const { chevronL, chevronR } = assets;
+
+export type ChangeDayObject = {
+  endDate?: Moment;
+  date?: Moment;
+  startDate?: Moment;
+  selecting?: boolean;
+  displayedDate?: Moment;
+};
+
+export type DateRangePickerProps = {
+  onChange: (date: ChangeDayObject) => void;
+  onClose?: () => void;
+  moment?: Moment;
+  startDate?: Moment;
+  endDate?: Moment;
+  displayedDate?: any;
+  minDate?: any;
+  maxDate?: any;
+  backdropStyle?: any;
+  containerStyle?: any;
+  headerTextStyle?: any;
+  monthButtonsStyle?: any;
+  dayTextStyle?: any;
+  dayStyle?: any;
+  headerStyle?: any;
+  buttonTextStyle?: any;
+  buttonStyle?: any;
+  buttonContainerStyle?: any;
+  presetButtons?: any;
+  dayHeaderTextStyle?: any;
+  selectedStyle?: any;
+  selectedTextStyle?: any;
+  disabledStyle?: any;
+  disabledTextStyle?: any;
+  monthPrevButton?: any;
+  monthNextButton?: any;
+  dayHeaders?: any;
+  open?: boolean;
+  date?: any;
+  range?: boolean;
+  dayHeaderStyle?: any;
+  buttons?: any;
+};
+
+const DateRangePicker: React.FC<PropsWithChildren<DateRangePickerProps>> = ({
   startDate,
   endDate,
   onChange,
@@ -25,7 +74,7 @@ const DateRangePicker = ({
   minDate,
   date,
   maxDate,
-  range,
+  range = false,
   dayHeaderTextStyle,
   dayHeaderStyle,
   backdropStyle,
@@ -39,20 +88,26 @@ const DateRangePicker = ({
   headerTextStyle,
   monthButtonsStyle,
   headerStyle,
-  monthPrevButton,
-  monthNextButton,
-  children,
-  buttonContainerStyle,
-  buttonStyle,
-  buttonTextStyle,
-  presetButtons,
-  open,
+  onClose,
+  moment,
+  monthPrevButton = undefined,
+  monthNextButton = undefined,
+  children = null,
+  buttonContainerStyle = undefined,
+  buttonStyle = undefined,
+  buttonTextStyle = undefined,
+  presetButtons = undefined,
+  open = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [weeks, setWeeks] = useState([]);
   const [selecting, setSelecting] = useState(false);
   const [dayHeaders, setDayHeaders] = useState([]);
-  const _moment = moment || momentDefault;
+  const _moment = momentDefault;
+
+  if (moment) {
+    momentDefault();
+  }
+
   const mergedStyles = {
     backdrop: {
       ...styles.backdrop,
@@ -78,32 +133,6 @@ const DateRangePicker = ({
       ...styles.buttonContainer,
       ...buttonContainerStyle,
     },
-    monthButtons: {
-      ...styles.monthButtons,
-      ...monthButtonsStyle,
-    },
-  };
-
-  const _onOpen = () => {
-    if (typeof open !== "boolean") onOpen();
-  };
-
-  const _onClose = () => {
-    if (typeof open !== "boolean") onClose();
-  };
-
-  const onOpen = () => {
-    setIsOpen(true);
-  };
-
-  const onClose = () => {
-    setIsOpen(false);
-    setSelecting(false);
-    if (!endDate) {
-      onChange({
-        endDate: startDate,
-      });
-    }
   };
 
   const previousMonth = () => {
@@ -209,13 +238,6 @@ const DateRangePicker = ({
   );
 
   useEffect(() => {
-    if (typeof open === "boolean") {
-      if (open && !isOpen) onOpen();
-      else if (!open && isOpen) onClose();
-    }
-  }, [open]);
-
-  useEffect(() => {
     function populateHeaders() {
       let _dayHeaders = [];
       for (let i = 0; i <= 6; ++i) {
@@ -311,7 +333,7 @@ const DateRangePicker = ({
 
   const node = (
     <View>
-      <TouchableWithoutFeedback onPress={_onOpen}>
+      <TouchableWithoutFeedback>
         {children ? (
           children
         ) : (
@@ -323,13 +345,10 @@ const DateRangePicker = ({
     </View>
   );
 
-  return isOpen ? (
+  return open ? (
     <>
       <View style={mergedStyles.backdrop}>
-        <TouchableWithoutFeedback
-          style={styles.closeTrigger}
-          onPress={_onClose}
-        >
+        <TouchableWithoutFeedback style={styles.closeTrigger} onPress={onClose}>
           <View style={styles.closeContainer} />
         </TouchableWithoutFeedback>
         <View>
@@ -406,33 +425,6 @@ const DateRangePicker = ({
 
 export default DateRangePicker;
 
-DateRangePicker.defaultProps = {
-  dayHeaders: true,
-  range: false,
-  buttons: false,
-  presetButtons: false,
-};
-
-DateRangePicker.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
-  displayedDate: PropTypes.object,
-  minDate: PropTypes.object,
-  maxDate: PropTypes.object,
-  backdropStyle: PropTypes.object,
-  containerStyle: PropTypes.object,
-  headerTextStyle: PropTypes.object,
-  monthButtonsStyle: PropTypes.object,
-  dayTextStyle: PropTypes.object,
-  dayStyle: PropTypes.object,
-  headerStyle: PropTypes.object,
-  buttonTextStyle: PropTypes.object,
-  buttonStyle: PropTypes.object,
-  buttonContainerStyle: PropTypes.object,
-  presetButtons: PropTypes.bool,
-};
-
 const styles = StyleSheet.create({
   backdrop: {
     backgroundColor: "rgba(0,0,0,0.6)",
@@ -481,6 +473,8 @@ const styles = StyleSheet.create({
   monthButtons: {
     fontSize: 16,
     color: "black",
+    width: 32,
+    height: 32,
   },
   dayHeaderContainer: {
     flexDirection: "row",
@@ -498,9 +492,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
-  },
-  monthButtons: {
-    width: 32,
-    height: 32,
   },
 });

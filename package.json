@@ -1,12 +1,15 @@
 {
-  "name": "react-native-daterange-picker",
-  "version": "1.5.1",
+  "name": "@cocho/react-native-daterange-picker",
+  "version": "0.1.1",
+  "private": false,
   "description": "Date range and single date picker for React Native (Supports iOS and Android)",
-  "main": "src/index.js",
-  "scripts": {},
+  "main": "./src/index.tsx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/naxulanth/react-native-daterange-picker.git"
+    "url": "git+https://github.com/cochoio/react-native-daterange-picker.git"
+  },
+  "scripts": {
+    "build": "tsc"
   },
   "keywords": [
     "react-native",
@@ -14,15 +17,17 @@
     "daterange",
     "daterange-picker"
   ],
-  "author": "Naxulanth",
+  "author": "cochoio",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/naxulanth/react-native-daterange-picker/issues"
+    "url": "https://github.com/cochoio/react-native-daterange-picker/issues"
   },
-  "homepage": "https://github.com/naxulanth/react-native-daterange-picker/",
+  "homepage": "https://github.com/cochoio/react-native-daterange-picker/",
   "dependencies": {
+    "@cocho/react-native-daterange-picker": "^0.1.1",
+    "dayjs": "^1.11.5",
     "lodash": "^4.17.19",
-    "moment": "^2.27.0"
+    "moment": "^2.29.4"
   },
   "peerDependencies": {
     "react": "^16.13.1",
@@ -36,6 +41,7 @@
     "eslint-plugin-react": "^7.20.5",
     "eslint-plugin-react-hooks": "^4.0.8",
     "eslint-plugin-react-native": "^3.8.1",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "typescript": "^4.7.4"
   }
 }
